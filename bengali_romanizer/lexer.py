@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+
 class Lexer:
     """Universal text lexer with convenient navigation methods"""
 
@@ -48,9 +51,8 @@ class Lexer:
             if isinstance(pattern, str):
                 if char != pattern:
                     return False
-            elif isinstance(pattern, (set, dict)):
-                if char not in pattern:
-                    return False
+            elif isinstance(pattern, (set, dict)) and char not in pattern:
+                return False
         return True
 
     def extract_while(self, condition) -> str:

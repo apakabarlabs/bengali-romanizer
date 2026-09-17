@@ -5,8 +5,8 @@ import yaml
 
 from bengali_romanizer import romanize
 from bengali_romanizer.romanizer import (
-    BengaliAksharaTokenizer,
     BengaliAkshara,
+    BengaliAksharaTokenizer,
     _BengaliTransliterator,
 )
 
@@ -51,9 +51,10 @@ def test_akshara_translation_methods(method_name, akshara_args, expected):
 
     if method_name == "_translate_independent_vowel":
         result = method(independent_vowel_map)
-    elif method_name == "_translate_nukta_consonant":
-        result = method(consonant_map)
-    elif method_name == "_translate_conjunct_with_halant":
+    elif (
+        method_name == "_translate_nukta_consonant"
+        or method_name == "_translate_conjunct_with_halant"
+    ):
         result = method(consonant_map)
     else:  # _translate_single_consonant
         result = method(consonant_map, vowel_map, special_map)

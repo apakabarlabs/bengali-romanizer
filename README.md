@@ -1,4 +1,5 @@
-[![Tests](https://github.com/apakabarfm/bengali-romanizer/actions/workflows/test.yml/badge.svg)](https://github.com/apakabarfm/bengali-romanizer/actions/workflows/test.yml)
+[![Tests](https://github.com/apakabarlabs/bengali-romanizer/actions/workflows/test.yml/badge.svg)](https://github.com/apakabarlabs/bengali-romanizer/actions/workflows/test.yml)
+[![Documentation](https://github.com/apakabarlabs/bengali-romanizer/actions/workflows/documentation.yml/badge.svg)](https://apakabarlabs.github.io/bengali-romanizer/bengali_romanizer.html)
 
 # Bengali Romanizer
 
@@ -38,3 +39,7 @@ pip install git+https://github.com/apakabarfm/bengali-romanizer
   - Nukta consonants
 - Based on linguistic analysis of Bengali phonology
 - Comprehensive test coverage
+
+## Documentation
+
+The [API reference](https://apakabarlabs.github.io/bengali-romanizer/bengali_romanizer.html) is generated from the public Python API and deployed by GitHub Actions.

@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import unicodedata
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import ClassVar
+
 from .lexer import Lexer
 
 
@@ -8,10 +11,10 @@ from .lexer import Lexer
 class BengaliAkshara:
     """Bengali orthographic syllable (akshara) - indivisible unit for text processing"""
 
-    consonants: List[str]  # ['ধ', 'র'] for conjunct, ['ক'] for single
-    vowel: Optional[str]  # 'ি', 'ে' etc, None for inherent vowel
+    consonants: list[str]  # ['ধ', 'র'] for conjunct, ['ক'] for single
+    vowel: str | None  # 'ি', 'ে' etc, None for inherent vowel
     ending_halant: bool  # True if akshara ends with halant (ধর্)
-    special_marks: List[str]  # ['ং', 'ঁ'] etc
+    special_marks: list[str]  # ['ং', 'ঁ'] etc
 
     def __post_init__(self):
         # Independent vowels have no consonants
@@ -35,12 +38,10 @@ class BengaliAkshara:
         if consonant_idx >= len(self.consonants):
             return False
         # Special cases from tests - based on actual tokenization
-        if self.consonants == ["ভ", "ক"] and consonant_idx == 1:
-            return True  # ভক্তি: ['ভ', 'ক'] akshara, ক needs 'a' → bhak
-        return False
+        return self.consonants == ["ভ", "ক"] and consonant_idx == 1
 
     def _conjunct_keeps_final_vowel(
-        self, consonants: List[str], consonant: str, position: int
+        self, consonants: list[str], consonant: str, position: int
     ) -> bool:
         """Check if conjunct should keep inherent vowel on final consonant"""
         if position != len(consonants) - 1:
@@ -60,7 +61,7 @@ class BengaliAkshara:
         consonant_map: dict,
         vowel_map: dict,
         special_map: dict,
-        independent_vowel_map: dict = None,
+        independent_vowel_map: dict | None = None,
     ) -> str:
         """Convert this akshara to Latin using modular linguistic rules"""
         if not self.consonants:
@@ -168,7 +169,7 @@ class BengaliAksharaTokenizer:
     HALANT = "্"
 
     # Character sets
-    CONSONANTS = {
+    CONSONANTS: ClassVar[dict[str, str]] = {
         "ক": "ka",
         "খ": "kha",
         "গ": "ga",
@@ -207,7 +208,7 @@ class BengaliAksharaTokenizer:
     }
 
     # Independent vowels
-    INDEPENDENT_VOWELS = {
+    INDEPENDENT_VOWELS: ClassVar[dict[str, str]] = {
         "অ": "ô",
         "আ": "ā",
         "ই": "i",
@@ -221,7 +222,7 @@ class BengaliAksharaTokenizer:
         "ঔ": "au",
     }
 
-    VOWEL_SIGNS = {
+    VOWEL_SIGNS: ClassVar[dict[str, str]] = {
         "া": "ā",
         "ি": "i",
         "ী": "ī",
@@ -237,9 +238,9 @@ class BengaliAksharaTokenizer:
         "ৣ": "ḹ",
     }
 
-    SPECIAL_MARKS = {"ং", "ঃ", "ঁ", "ৎ"}
+    SPECIAL_MARKS: ClassVar[set[str]] = {"ং", "ঃ", "ঁ", "ৎ"}
 
-    def tokenize(self, text: str) -> List[BengaliAkshara]:
+    def tokenize(self, text: str) -> list[BengaliAkshara]:
         """Parse Bengali text into akshara (orthographic syllables)"""
         if not text:
             return []
@@ -269,7 +270,7 @@ class BengaliAksharaTokenizer:
 
         return syllables
 
-    def _parse_akshara(self, lexer: Lexer) -> Optional[BengaliAkshara]:
+    def _parse_akshara(self, lexer: Lexer) -> BengaliAkshara | None:
         """Parse one complete syllable starting at current lexer position"""
 
         # Start with consonant (required)
@@ -335,7 +336,7 @@ class _BengaliTransliterator:
     """Simplified Bengali transliterator using syllable-based approach"""
 
     # Bengali to Latin digit mapping
-    DIGIT_MAP = {
+    DIGIT_MAP: ClassVar[dict[str, str]] = {
         "০": "0",
         "১": "1",
         "২": "2",
@@ -349,7 +350,7 @@ class _BengaliTransliterator:
     }
 
     # Affricates for chandrabindu rules
-    AFFRICATES = {"চ", "ছ", "জ", "ঝ"}
+    AFFRICATES: ClassVar[set[str]] = {"চ", "ছ", "জ", "ঝ"}
 
     def __init__(self, translate_digits=True):
         self.tokenizer = BengaliAksharaTokenizer()
@@ -429,7 +430,7 @@ class _BengaliTransliterator:
         return unicodedata.normalize("NFC", "".join(result))
 
     def _transliterate_aksharas(
-        self, aksharas: List[BengaliAkshara], original_word: str, vowel_map: dict
+        self, aksharas: list[BengaliAkshara], original_word: str, vowel_map: dict
     ) -> str:
         """Transliterate a list of aksharas for a single word"""
         # Convert each akshara to Latin with context awareness
@@ -461,10 +462,9 @@ class _BengaliTransliterator:
                     and i < len(aksharas) - 1
                     and aksharas[i + 1].consonants
                     and aksharas[i + 1].consonants[0] in self.AFFRICATES
+                    and latin.endswith("̃")
                 ):
-                    # Replace tilde with ṅ for affricate context
-                    if latin.endswith("̃"):
-                        latin = latin[:-1] + "ṅ"
+                    latin = latin[:-1] + "ṅ"
 
                 result.append(latin)
 
@@ -474,7 +474,7 @@ class _BengaliTransliterator:
     def _translate_akshara_with_context(
         self,
         akshara: BengaliAkshara,
-        all_aksharas: List[BengaliAkshara],
+        all_aksharas: list[BengaliAkshara],
         position: int,
         vowel_map: dict,
     ) -> str:
@@ -510,9 +510,7 @@ class _BengaliTransliterator:
                 and prev_was_conjunct
                 and prev_akshara.consonants
                 and prev_akshara.consonants[-1] == "র"
-            ):
-                return base_result[:-1] if base_result.endswith("a") else base_result
-            elif prev_had_halant:
+            ) or prev_had_halant:
                 return base_result[:-1] if base_result.endswith("a") else base_result
 
             # Rule from tests: single consonants after vowels lose inherent vowel
@@ -556,7 +554,7 @@ class _BengaliTransliterator:
 
         return base_result
 
-    def _has_vowel_context(self, aksharas: List[BengaliAkshara], position: int) -> bool:
+    def _has_vowel_context(self, aksharas: list[BengaliAkshara], position: int) -> bool:
         """Check if akshara at position has vowel context from previous aksharas"""
         if position == 0:
             return False
