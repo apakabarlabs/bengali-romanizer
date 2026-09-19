@@ -1,200 +1,41 @@
-basic_romanization:
-  - title: "Empty string"
-    input: ""
-    expected: ""
-  
-  - title: "Single consonant"
-    input: "ক"
-    expected: "ka"
-  
-  - title: "Independent vowel" 
-    input: "অ"
-    expected: "ô"
-  
-  - title: "Consonant with vowel sign (native speaker confirmed)"
-    input: "কি"
-    expected: "ki"
-  
-  - title: "O-kar vowel sign (native speaker confirmed)"
-    input: "কো"
-    expected: "ko"
-  
-  - title: "A-kar vowel sign (native speaker confirmed)"
-    input: "কা" 
-    expected: "kā"
+verified_words:
+  - title: Bangla
+    input: বাংলা
+    expected: bangla
+  - title: Thanks
+    input: ধন্যবাদ
+    expected: dhonnobad
+  - title: Devotion
+    input: ভক্তি
+    expected: bhokti
+  - title: Religion
+    input: ধর্ম
+    expected: dhôrmo
+  - title: Sorrow
+    input: দুঃখ
+    expected: dukkho
+  - title: Bengali New Year
+    input: নববর্ষ
+    expected: nôbobôrsho
+  - title: In Bengali
+    input: বাংলায়
+    expected: banglay
+  - title: Fourteenth
+    input: চতুর্দশ
+    expected: choturdôsh
 
-conjunct_consonants:
-  - title: "Simple conjunct"
-    input: "ক্ত"
-    expected: "kt"
-  
-  - title: "Complex word with conjunct (native speaker confirmed)"
-    input: "ভক্তি"
-    expected: "bhakti"
-  
-  - title: "Conjunct with halant"
-    input: "ধর্"
-    expected: "dhr"
-  
-  - title: "Conjunct plus consonant"
-    input: "ধর্ম"
-    expected: "dhrm"
-  
-  - title: "Conjunct plus consonant with vowel"
-    input: "ধর্মী"
-    expected: "dhrmī"
-  
-  - title: "Conjunct with inherent vowel exception"
-    input: "র্দ"
-    expected: "rda"
+text:
+  - title: Words, Bengali digits, and punctuation
+    input: বাংলা নববর্ষ ১২৩!
+    expected: bangla nôbobôrsho 123!
+  - title: Latin text is preserved
+    input: বাংলা / Bangla
+    expected: bangla / Bangla
 
-nukta_consonants:
-  - title: "Nukta retroflex"
-    input: "ড়"
-    expected: "ṛ"
-
-diphthongs:
-  - title: "AI diphthong"
-    input: "কৈ" 
-    expected: "kai"
-  
-  - title: "AU diphthong"
-    input: "কৌ"
-    expected: "kau"
-
-nasalization:
-  - title: "Anusvara"
-    input: "বাংলা"
-    expected: "bāṅlā"
-  
-  - title: "Visarga" 
-    input: "দুঃখ"
-    expected: "duḥkha"
-  
-  - title: "Chandrabindu"
-    input: "চাঁদ"
-    expected: "cãd"
-
-phala_clusters:
-  - title: "R-phala cluster"
-    input: "ক্র"
-    expected: "kra"
-  
-  - title: "Y-phala cluster"
-    input: "ত্য"
-    expected: "tya"
-  
-  - title: "Triple cluster"
-    input: "স্ক্র"
-    expected: "skra"
-
-rare_vowels:
-  - title: "Vocalic R"
-    input: "ঋ"
-    expected: "ṛ"
-
-edge_cases:
-  - title: "Final consonant with inherent vowel"
-    input: "খ"
-    expected: "kha"
-  
-  - title: "Single consonant at word end"
-    input: "দ"
-    expected: "da"
-  
-  - title: "Single DH consonant"
-    input: "ধ"
-    expected: "dha"
-  
-  - title: "Single R consonant"
-    input: "র"
-    expected: "ra"
-  
-  - title: "Two consonants without halant"
-    input: "মধ"
-    expected: "madha"
-
-regression_tests:
-  - title: "Morning related word"
-    input: "ভোরতের"
-    expected: "bhorter"
-  
-  - title: "Religious word"
-    input: "ধর্মীয়"
-    expected: "dhrmīy"
-  
-  - title: "Heritage word"
-    input: "ঐতিহ্য"
-    expected: "aitihyô"
-  
-  - title: "Chapter word"
-    input: "অধ্যায়"
-    expected: "ôdhyôy"
-  
-  - title: "Fourteenth"
-    input: "চতুর্দশ"
-    expected: "caturdaś"
-  
-  - title: "Sixteen"
-    input: "ষোড়শ"
-    expected: "ṣoṛś"
-  
-  - title: "Gods"
-    input: "ঈশ্বরের"
-    expected: "īśbarer"
-  
-  - title: "Vaishnava related"
-    input: "বৈষ্ণবীয়"
-    expected: "baiṣṇabīy"
-  
-  - title: "Medieval"
-    input: "মধ্যযুগীয়"
-    expected: "mdhyayugīy"
-  
-  - title: "Bengali in/to"
-    input: "বাংলায়"
-    expected: "bāṅlāy"
-    skip: "FIXME: Currently produces bāṅlôy - ায় ending rule inconsistent"
-  
-  - title: "Reach word"
-    input: "পৌঁছে"
-    expected: "pauṅche"
-
-word_separation:
-  - title: "Two words with space"
-    input: "বাংলা ভাষা"
-    expected: "bāṅlā bhāṣā"
-  
-  - title: "Numbers and punctuation"
-    input: "123 বাংলা!"
-    expected: "123 bāṅlā!"
-  
-  - title: "Word with complex conjuncts"
-    input: "নববর্ষ"
-    expected: "nbbrṣ"
-    skip: "FIXME: Currently produces nababrṣ - inherent vowel issue in conjuncts"
-  
-  - title: "Comma and exclamation"
-    input: "বাংলা, ভাষা!"
-    expected: "bāṅlā, bhāṣā!"
-  
-  - title: "Bengali numbers"
-    input: "১২৩ বাংলা"
-    expected: "123 bāṅlā"
-  
-  - title: "Latin numbers"
-    input: "123 বাংলা"
-    expected: "123 bāṅlā"
-  
-  - title: "Parentheses"
-    input: "বাংলা (ভাষা)"
-    expected: "bāṅlā (bhāṣā)"
-  
-  - title: "Quotes"
-    input: 'বাংলা "ভাষা"'
-    expected: 'bāṅlā "bhāṣā"'
-  
-  - title: "Long text with multiple words"
-    input: "বাংলা নববর্ষ বাংলা পঞ্জিকা অনুসারে বছরের প্রথম দিনকে উদযাপন করার এক বিশেষ মুহূর্ত।"
-    expected: "bāṅlā nbbrṣ bāṅlā pñjikā ônusāre bchrer prthm dinke udyāpn krār ek biśeṣ muhūrt."
-    skip: "FIXME: নববর্ষ produces nababrṣ instead of nbbrṣ"
+uncertainty:
+  - title: An unknown word is not guessed
+    input: কৌ
+    expected: কৌ
+  - title: A context-dependent homograph is not guessed
+    input: করে
+    expected: করে

@@ -25,6 +25,7 @@ htmlcov/
 .tox/
 .venv
 venv/
+.tools/
 ENV/
 env/
 # IDE
