@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1
+
+No runtime behaviour changes.
+
+### Fixed
+
+- The lines-of-code graph in the README now displays on PyPI.
+
 ## 0.2.0
 
 ### Changed
