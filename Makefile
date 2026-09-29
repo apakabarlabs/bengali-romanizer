@@ -46,7 +46,7 @@ wheel-smoke:
 	rm -rf /tmp/bengali-romanizer-smoke
 	python3 -m venv /tmp/bengali-romanizer-smoke
 	/tmp/bengali-romanizer-smoke/bin/pip install dist/*.whl
-	/tmp/bengali-romanizer-smoke/bin/python -c "import bengali_romanizer; assert bengali_romanizer.__version__ == '0.2.0'; assert bengali_romanizer.romanize('বাংলা') == 'bangla'"
+	/tmp/bengali-romanizer-smoke/bin/python -I -c "import importlib.metadata, bengali_romanizer; assert bengali_romanizer.__version__ == importlib.metadata.version('bengali-romanizer'); assert bengali_romanizer.romanize('বাংলা') == 'bangla'"
 	rm -rf /tmp/bengali-romanizer-smoke
 
 clean:
