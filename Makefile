@@ -2,18 +2,13 @@
 
 .PHONY: install install-tools build test docs comments lint format wheel-smoke clean
 
-COMMENTCENSOR_VERSION ?= v0.3.2
-COMMENTCENSOR_ENV = .tools/commentcensor
-COMMENTCENSOR = $(COMMENTCENSOR_ENV)/bin/commentcensor
-
 install:
 	python3 -m venv venv
 	venv/bin/pip install --upgrade pip setuptools
 	venv/bin/pip install -e '.[dev]'
 
 install-tools:
-	python3 -m venv $(COMMENTCENSOR_ENV)
-	$(COMMENTCENSOR_ENV)/bin/pip install --quiet --upgrade git+https://github.com/botforge-pro/commentcensor.git@$(COMMENTCENSOR_VERSION)
+	python3 -m pip install --quiet --upgrade git+https://github.com/botforge-pro/commentcensor.git
 
 test:
 	venv/bin/pytest --cov --cov-report=term-missing --doctest-glob=README.md README.md tests
@@ -25,7 +20,7 @@ install-deps:
 	$(MAKE) install
 
 comments:
-	$(COMMENTCENSOR) .
+	commentcensor .
 
 lint: comments
 	venv/bin/python -m ruff check bengali_romanizer tests
