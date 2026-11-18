@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := build
 
-.PHONY: install install-tools build test docs comments lint format wheel-smoke clean
+.PHONY: install install-tools build test docs comments lint format wheel-smoke
 
 install:
 	python3 -m venv venv
@@ -43,6 +43,3 @@ wheel-smoke:
 	/tmp/bengali-romanizer-smoke/bin/pip install dist/*.whl
 	/tmp/bengali-romanizer-smoke/bin/python -I -c "import importlib.metadata, bengali_romanizer; assert bengali_romanizer.__version__ == importlib.metadata.version('bengali-romanizer'); assert bengali_romanizer.romanize('বাংলা') == 'bangla'"
 	rm -rf /tmp/bengali-romanizer-smoke
-
-clean:
-	rm -rf build dist *.egg-info .pytest_cache .ruff_cache
